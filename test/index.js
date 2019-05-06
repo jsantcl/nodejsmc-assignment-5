@@ -41,8 +41,8 @@ _app.runTest = () => {
                         let tmpTestValue = subtest[testname];
                         //call the test
                         try {
-                            tmpTestValue(()=>{
-                                //if ok print name of test in green
+                            tmpTestValue( function() {
+                                //if ok print test name in green
                                 console.log('\x1b[32m%s\x1b[0m', tmpTestName);
                                 counter++;
                                 successes++;
@@ -53,6 +53,7 @@ _app.runTest = () => {
                         } catch(e) {
                             //push error in errores array
                             errors.push({'name':testname, 'error':e});
+                            // print test name in red
                             console.log('\x1b[31m%s\x1b[0m', tmpTestName);
                             counter++;
                             if( counter == limit) {

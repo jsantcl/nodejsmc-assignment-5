@@ -6,9 +6,6 @@
 const app = require('../app/server');
 const assert = require('assert');
 const http = require('http');
-//This is for json object response decoding
- const StringDecoder = require("string_decoder");
-
 
 // Main test object
 let api = {};
@@ -16,6 +13,7 @@ let api = {};
 
 // Test a get request on port 3000
 helper = {};
+
 helper.getTest = ( path, callback) => {
 
     //configure the request
@@ -31,32 +29,18 @@ helper.getTest = ( path, callback) => {
     //send the request
     let req = http.request(requestDetails, (res)=>{
 
+        // Get the response data
         res.setEncoding('utf8');
         let rawData = '';
         res.on('data', (chunk) => { rawData += chunk; });
         res.on('end', () => {
-          try {
-            const parsedData = JSON.parse(rawData);
-            callback(res, parsedData);
-          } catch (e) {
-            console.error(e.message);
-          }
+          const data = JSON.parse(rawData);
+          callback(res, data);
         });
     });
 
     req.end();
-
 };
-
-helper.parseJsonToObject = ( str)=> {
-    try {
-        var obj = JSON.parse( str);
-    } catch( e) {
-        return {};
-    }
-    return obj;
-}
-
 
 // start the API
 api['server init should not throw'] = (done) => {
@@ -69,27 +53,28 @@ api['server init should not throw'] = (done) => {
 
 
 api['localhost should respond with 200'] = (done) => {
-    helper.getTest('/', (res, parsedData)=>{
-        assert.equal(res.statusCode, 200);
+    helper.getTest('/', (res, data)=>{
+        assert.equal(res.statusCode, 400);
         done();
     });
 }
 
 
 api['localhost should repond with a json object'] = (done) => {
-    helper.getTest('/', (res, parsedData)=>{
-        assert.equal(typeof(parsedData), 'number')
+    helper.getTest('/', (res, data)=>{
+        assert.equal(typeof(data), 'object');
         done();
     });
+    
 }
 
 
 api['localhost should return an object with keys "name" and "status"'] = (done) => {
     let validKeys = ['name','status'];
     let errors = [];
-    helper.getTest('/', (res, parsedData)=>{
-        for (key in parsedData) {
-            if( parsedData.hasOwnProperty(key)) {
+    helper.getTest('/', (res, data)=>{
+        for (key in data) {
+            if( data.hasOwnProperty(key)) {
                 if( validKeys.indexOf(key)==-1) 
                     errors.push(key);
             }
