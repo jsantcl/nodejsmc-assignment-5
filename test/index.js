@@ -20,53 +20,6 @@ _app.tests.unit=require('./unit');
 //API Test
 _app.tests.api =require('./api');
 
-
-
-
-
-//Run all the Test, collect errors and report
-_app.runTest = () => {
-    let errors = Array();
-    let successes = 0;
-    let limit = _app.CountTest();
-    let counter = 0;
-
-    for(let key in _app.tests) {
-        if(_app.tests.hasOwnProperty(key)) {
-            let subtest = _app.tests[key];
-            for( let testname in subtest) {
-                if( subtest.hasOwnProperty(testname)) {
-                    ( function(){
-                        let tmpTestName = testname;
-                        let tmpTestValue = subtest[testname];
-                        //call the test
-                        try {
-                            tmpTestValue( function() {
-                                //if ok print test name in green
-                                console.log('\x1b[32m%s\x1b[0m', tmpTestName);
-                                counter++;
-                                successes++;
-                                if( counter == limit) {
-                                    _app.produceTestReport( limit, successes, errors);
-                                }
-                            });
-                        } catch(e) {
-                            //push error in errores array
-                            errors.push({'name':testname, 'error':e});
-                            // print test name in red
-                            console.log('\x1b[31m%s\x1b[0m', tmpTestName);
-                            counter++;
-                            if( counter == limit) {
-                                _app.produceTestReport( limit, successes, errors);
-                            }
-                        }
-                    })();
-                }
-            }
-        }
-    }
-}
-
 //Count the number of tests
 _app.CountTest = () => {
     let counter = 0;
@@ -83,6 +36,53 @@ _app.CountTest = () => {
     }
     return counter;
 }
+
+
+
+//Run all the Test, collect errors and report
+_app.runTest = () => {
+    let errors = [];
+    let successes = 0;
+    let limit = _app.CountTest();
+    let counter = 0;
+
+    for(let key in _app.tests) {
+        if(_app.tests.hasOwnProperty(key)) {
+            let subTest = _app.tests[key];
+            for( let testName in subTest) {
+                if( subTest.hasOwnProperty(testName)) {
+                    ( function(){
+                        let tmpTestName = testName;
+                        let testValue = subTest[testName];
+                        //call the test
+                        try {
+                            testValue( function() {
+                                //if ok print test name in green
+                                console.log('\x1b[32m%s\x1b[0m', tmpTestName);
+                                counter++;
+                                successes++;
+                                if( counter == limit) {
+                                    _app.produceTestReport( limit, successes, errors);
+                                }
+                            });
+                        } catch(e) {
+                            //push error in errores array
+                            errors.push({'name':testName, 'error':e});
+                            // print test name in red
+                            console.log('\x1b[31m%s\x1b[0m', tmpTestName);
+                            counter++;
+                            if( counter == limit) {
+                                _app.produceTestReport( limit, successes, errors);
+                            }
+                        }
+                    })();
+                }
+            }
+        }
+    }
+}
+
+
 
 
 _app.produceTestReport = ( limit, successes, errors) => {

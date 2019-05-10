@@ -52,14 +52,16 @@ api['server init should not throw'] = (done) => {
 }
 
 
+// test status code returned by server
 api['localhost should respond with 200'] = (done) => {
     helper.getTest('/', (res, data)=>{
-        assert.equal(res.statusCode, 400);
+        assert.equal(res.statusCode, 200);
         done();
     });
 }
 
 
+// test if json object is returned
 api['localhost should repond with a json object'] = (done) => {
     helper.getTest('/', (res, data)=>{
         assert.equal(typeof(data), 'object');
@@ -68,7 +70,7 @@ api['localhost should repond with a json object'] = (done) => {
     
 }
 
-
+//test if object returned has keys name and status
 api['localhost should return an object with keys "name" and "status"'] = (done) => {
     let validKeys = ['name','status'];
     let errors = [];
@@ -83,8 +85,6 @@ api['localhost should return an object with keys "name" and "status"'] = (done) 
         done();
     });
 }
-
-
 
 
 // Export the test
