@@ -2,5 +2,7 @@
 Nodejs Master Class Homework Assignment #5
 # How to run the Test
 On the application folder run:
-node test
+
+#node test
+
 Then check the error report
