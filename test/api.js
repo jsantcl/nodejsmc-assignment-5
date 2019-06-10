@@ -43,6 +43,7 @@ helper.getTest = ( path, callback) => {
 };
 
 // start the API
+// Test no. 1
 api['server init should not throw'] = (done) => {
     assert.doesNotThrow(()=>{
         app.init( (err)=>{
@@ -53,7 +54,8 @@ api['server init should not throw'] = (done) => {
 
 
 // test status code returned by server
-api['localhost should respond with 200'] = (done) => {
+// Test no. 2
+api['localhost should return status code 200'] = (done) => {
     helper.getTest('/', (res, data)=>{
         assert.equal(res.statusCode, 200);
         done();
@@ -62,7 +64,8 @@ api['localhost should respond with 200'] = (done) => {
 
 
 // test if json object is returned
-api['localhost should repond with a json object'] = (done) => {
+// Test no. 3
+api['localhost should return a json object'] = (done) => {
     helper.getTest('/', (res, data)=>{
         assert.equal(typeof(data), 'object');
         done();
@@ -71,6 +74,7 @@ api['localhost should repond with a json object'] = (done) => {
 }
 
 //test if object returned has keys name and status
+// Test no. 4
 api['localhost should return an object with keys "name" and "status"'] = (done) => {
     let validKeys = ['name','status'];
     let errors = [];

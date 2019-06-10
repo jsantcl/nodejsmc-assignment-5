@@ -8,15 +8,9 @@
 
 _app = {};
 
-
-
-
 //Container for the actual Test
-
 _app.tests =  {};
-
 _app.tests.unit=require('./unit');
-
 //API Test
 _app.tests.api =require('./api');
 
@@ -36,7 +30,6 @@ _app.CountTest = () => {
     }
     return counter;
 }
-
 
 
 //Run all the Test, collect errors and report
